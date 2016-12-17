@@ -6,12 +6,14 @@ public class PlayerController : MonoBehaviour {
 
 	[HideInInspector] public bool isJumping = false;
 
+	[Header("Movement Variables")]
 	public float moveForce;
 	public float maxSpeed;
 	public float jumpForce;
 	public float airResistance;
 	public float gravity;
 
+	[Header("Ground Checkers")]
 	public Transform groundCheckLeft;
 	public Transform groundCheckRight;
 
@@ -38,6 +40,7 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate() {
 		float moveX = Input.GetAxis ("Horizontal");
+
 		if (grounded) {
 			AddHorizontalGroundForce (moveX);
 		} else {
@@ -66,7 +69,7 @@ public class PlayerController : MonoBehaviour {
 
 	void AddHorizontalAirForce(float forceX) {
 		if (forceX * rb2d.velocity.x < maxSpeed) {
-			rb2d.AddForce (Vector2.right * forceX * moveForce / airResistance);
+			rb2d.AddForce (Vector2.right * forceX * (moveForce / airResistance));
 			rb2d.AddForce (Vector2.down * gravity);
 		}
 	}
