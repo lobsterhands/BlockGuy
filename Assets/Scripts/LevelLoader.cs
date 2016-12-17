@@ -51,11 +51,13 @@ public class LevelLoader : MonoBehaviour {
 			current = levelData[count];
 		}
 
+		GameObject groundHolder = new GameObject ();
 		for (var vert = 0; vert < maxY; vert++) {
 			for (var horiz = 0; horiz < maxX; horiz++) {
 				switch (currentLevel [horiz, vert]) {
 				case '#':
-					Instantiate (groundGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
+					GameObject ground = Instantiate (groundGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
+					ground.transform.parent = groundHolder.transform;
 					break;
 				case '@':
 					Instantiate (playerGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
