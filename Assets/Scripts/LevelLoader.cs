@@ -52,6 +52,7 @@ public class LevelLoader : MonoBehaviour {
 		}
 
 		GameObject groundHolder = new GameObject ();
+		groundHolder.name = "GroundHolder";
 		for (var vert = 0; vert < maxY; vert++) {
 			for (var horiz = 0; horiz < maxX; horiz++) {
 				switch (currentLevel [horiz, vert]) {
