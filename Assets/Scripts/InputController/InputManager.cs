@@ -4,7 +4,11 @@ using UnityEngine;
 
 public enum Buttons {
 	Right,
-	Left
+	Left,
+	Up,
+	Down,
+	A,
+	B
 }
 
 public enum Comparison { 
@@ -41,8 +45,13 @@ public class InputManager : MonoBehaviour {
 	public InputState inputState;
 		
 	void Update () {
-		foreach (var input in inputs) {
-			inputState.SetButtonState (input.button, input.isBeingPressed);
+		if (inputs != null) {
+			foreach (var input in inputs) {
+				inputState.SetButtonState (input.button, input.isBeingPressed);
+			}
+		} else {
+			Debug.Log ("No input found.");
 		}
+
 	}
 }

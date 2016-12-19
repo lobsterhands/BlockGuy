@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-
-	[HideInInspector] public bool isJumping = false;
+public class SimpleMovement : MonoBehaviour {
 
 	[Header("Movement Variables")]
+	public float speed = 5f;
 	public Buttons[] input;
-
-	[Header("Movement Variables")]
-	public float moveForce;
-	public float maxSpeed;
 	public float jumpForce;
 	public float airResistance;
 	public float gravity;
@@ -27,83 +22,55 @@ public class PlayerController : MonoBehaviour {
 	private bool facingRight = true;
 	private Rigidbody2D body2d;
 	private InputState inputState;
+	private SpriteRenderer spriteRenderer;
 
-	private SpriteRenderer sprite;
-	private float moveX;
+	[HideInInspector] 
+	public bool isJumping = false;
 
-	void Awake () {
+	// Use this for initialization
+	void Start () {
 		body2d = GetComponent<Rigidbody2D> ();
 		inputState = GetComponent<InputState> ();
-		sprite = GetComponent<SpriteRenderer> ();
-		moveX = maxSpeed;
-	}
+		spriteRenderer = GetComponent<SpriteRenderer> ();
 
+		jumpForce = 400f;
+	}
+	
 	// Update is called once per frame
 	void Update () {
 
 		var right = inputState.GetButtonValue (input[0]);
 		var left = inputState.GetButtonValue (input[1]);
-		var velX = maxSpeed;
+		var velX = speed;
 
 		if (right || left) {
 			velX *= left ? -1 : 1;
 		} else {
 			velX = 0;
 		}
-
 		body2d.velocity = new Vector2 (velX, body2d.velocity.y);
-
-
-		grounded = IsPlayerGrounded ();
-		if (Input.GetButtonDown ("Jump") && grounded) {
+			
+		if ((velX > 0 && !facingRight) || (velX < 0 && facingRight)) {
+			FlipDirectionX ();
+		}
+			
+		if (Input.GetButtonDown ("Jump") && IsPlayerGrounded()) {
 			isJumping = true;
+			Debug.Log ("Jumping");
 		}
 	}
 
 	void FixedUpdate() {
-
-		//float moveX = Input.GetAxis ("Horizontal");
-
-//		if (grounded) {
-//			AddHorizontalGroundForce (moveX);
-//		} else {
-//			AddHorizontalAirForce (moveX);
-//		}
-//
-		if ((moveX > 0 && !facingRight) || (moveX < 0 && facingRight)) {
-			FlipDirectionX ();
-		}
-//
-//		if (Mathf.Abs (body2d.velocity.x) > maxSpeed) {
-//			ClampMaxSpeed ();
-//		}
-
 		if (isJumping) {
 			body2d.AddForce (new Vector2 (0f, jumpForce));
 			isJumping = false;
 		}
 	}
 
-	void AddHorizontalGroundForce(float forceX) {
-		if (forceX * body2d.velocity.x < maxSpeed) {
-			body2d.AddForce (Vector2.right * forceX * moveForce);
-		}
-	}
-
-	void AddHorizontalAirForce(float forceX) {
-		if (forceX * body2d.velocity.x < maxSpeed) {
-			body2d.AddForce (Vector2.right * forceX * (moveForce / airResistance));
-			body2d.AddForce (Vector2.down * gravity);
-		}
-	}
-
-	void ClampMaxSpeed() {
-		body2d.velocity = new Vector2(Mathf.Sign(body2d.velocity.x) * maxSpeed, body2d.velocity.y);
-	}
 
 	void FlipDirectionX() {
 		facingRight = !facingRight;
-		sprite.flipX = !sprite.flipX;
+		spriteRenderer.flipX = !spriteRenderer.flipX;
 	}
 
 	bool IsPlayerGrounded() {

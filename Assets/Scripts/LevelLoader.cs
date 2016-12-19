@@ -6,22 +6,22 @@ using System.Collections.Generic;
 
 public class LevelLoader : MonoBehaviour {
 
-
 	public TextAsset textAsset;
 	public GameObject playerGO;
 	public GameObject groundGO;
 
 	// Use this for initialization
 	void Start () {
-		string levelData = textAsset.text.ToString();
+		string levelData = textAsset.text.ToString().Replace("\r\n", "\n");
 
-		int firstPassX = 0;
 		int maxX = 0;
 		int maxY = 0;
+		int firstPassX = 0;
+
 		int firstPassCount = 0;
 		char firstPassCurrent = levelData[firstPassCount];
 		while (firstPassCurrent != '!') {
-			if (firstPassCurrent == '\r') {
+			if (firstPassCurrent == '\n') {
 				maxY++;
 				maxX = firstPassX;
 				firstPassX = 0;
@@ -41,7 +41,7 @@ public class LevelLoader : MonoBehaviour {
 		char current = levelData[count];
 		while (current != '!') {
 			currentLevel [x, y] = current;
-			if (current == '\r') {
+			if (current == '\n') {
 				y++;
 				x = 0;
 			} else if (current != '\n') {
@@ -73,5 +73,9 @@ public class LevelLoader : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	void SetLevelsDimensions(int x, int y) {
+
 	}
 }
