@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+
 		float moveX = Input.GetAxis ("Horizontal");
 
 		if (grounded) {
