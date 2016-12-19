@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class ResetLevel : MonoBehaviour {
-
+	
 	public Button resetButton;
 
 	void Awake() {
