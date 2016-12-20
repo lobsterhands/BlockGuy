@@ -19,13 +19,20 @@ public class InputState : MonoBehaviour {
 		var bState = buttonStates [button];
 
 		if (bState.isActive && !isBeingPressed) {
-			Debug.Log("Button " + button + " released " + bState.holdTime);
 			bState.holdTime = 0f;
 		} else if (bState.isActive && isBeingPressed) {
-			Debug.Log("Button " + button + " down" + bState.holdTime);
 			bState.holdTime += Time.deltaTime;
 		}
 
 		bState.isActive = isBeingPressed;
+	}
+
+	public bool GetButtonValue(Buttons button) {
+		if (buttonStates.ContainsKey (button)) {
+			return buttonStates [button].isActive;
+		} else {
+			return false;
+		}
+
 	}
 }
