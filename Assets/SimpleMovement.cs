@@ -17,9 +17,7 @@ public class SimpleMovement : MonoBehaviour {
 
 	private bool groundedLeft = false;
 	private bool groundedRight = false;
-	private bool grounded = false;
 
-	private bool facingRight = true;
 	private Rigidbody2D body2d;
 	private InputState inputState;
 	private SpriteRenderer spriteRenderer;
@@ -35,12 +33,12 @@ public class SimpleMovement : MonoBehaviour {
 
 		jumpForce = 400f;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
-		var right = inputState.GetButtonValue (input[0]);
-		var left = inputState.GetButtonValue (input[1]);
+		var right = inputState.GetButtonValue (input[(int)Buttons.Right]);
+		var left = inputState.GetButtonValue (input[(int)Buttons.Left]);
 		var velX = speed;
 
 		if (right || left) {
@@ -49,14 +47,9 @@ public class SimpleMovement : MonoBehaviour {
 			velX = 0;
 		}
 		body2d.velocity = new Vector2 (velX, body2d.velocity.y);
-			
-		if ((velX > 0 && !facingRight) || (velX < 0 && facingRight)) {
-			FlipDirectionX ();
-		}
-			
+
 		if (Input.GetButtonDown ("Jump") && IsPlayerGrounded()) {
 			isJumping = true;
-			Debug.Log ("Jumping");
 		}
 	}
 
@@ -65,12 +58,6 @@ public class SimpleMovement : MonoBehaviour {
 			body2d.AddForce (new Vector2 (0f, jumpForce));
 			isJumping = false;
 		}
-	}
-
-
-	void FlipDirectionX() {
-		facingRight = !facingRight;
-		spriteRenderer.flipX = !spriteRenderer.flipX;
 	}
 
 	bool IsPlayerGrounded() {

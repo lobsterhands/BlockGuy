@@ -7,7 +7,14 @@ public class ButtonState {
 	public float holdTime = 0f;
 }
 
+public enum FacingDirections{
+	Right = 1,
+	Left = -1
+}
+
 public class InputState : MonoBehaviour {
+
+	public FacingDirections facingDir = FacingDirections.Right;
 
 	Dictionary<Buttons, ButtonState> buttonStates= new Dictionary<Buttons, ButtonState>();
 
