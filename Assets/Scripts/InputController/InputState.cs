@@ -15,7 +15,6 @@ public enum FacingDirections{
 public class InputState : MonoBehaviour {
 
 	public FacingDirections facingDir = FacingDirections.Right;
-
 	Dictionary<Buttons, ButtonState> buttonStates= new Dictionary<Buttons, ButtonState>();
 
 	public void SetButtonState(Buttons button, bool isBeingPressed) {
@@ -40,6 +39,13 @@ public class InputState : MonoBehaviour {
 		} else {
 			return false;
 		}
+	}
 
+	public float GetButtonHoldTime(Buttons button) {
+		if (buttonStates.ContainsKey (button)) {
+			return buttonStates [button].holdTime;
+		} else {
+			return 0;
+		}
 	}
 }

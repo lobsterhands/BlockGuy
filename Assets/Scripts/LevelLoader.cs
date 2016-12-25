@@ -5,32 +5,29 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class LevelLoader : MonoBehaviour {
-
+	
 	public TextAsset textAsset;
 	public GameObject playerGO;
 	public GameObject groundGO;
+	public GameObject flagGO;
+	public GameObject spikeGO;
+
+	private int maxX = 0;
+	private int maxY = 0;
+	private int leftOffAtIndex = 0;
+
+	private static int level = 0;
+	public static int getLevel() {
+		return level;
+	}
 
 	// Use this for initialization
 	void Start () {
 		string levelData = textAsset.text.ToString().Replace("\r\n", "\n");
 
-		int maxX = 0;
-		int maxY = 0;
-		int firstPassX = 0;
+		GetInitialCoordinates (levelData);
 
-		int firstPassCount = 0;
-		char firstPassCurrent = levelData[firstPassCount];
-		while (firstPassCurrent != '!') {
-			if (firstPassCurrent == '\n') {
-				maxY++;
-				maxX = firstPassX;
-				firstPassX = 0;
-			} else if (firstPassCurrent != '\n') {
-				firstPassX++;
-			}
-			firstPassCount++;
-			firstPassCurrent = levelData[firstPassCount];
-		}
+		Debug.Log ("NextLevelStartPosition is @: " + leftOffAtIndex);
 
 		char[,] currentLevel = new char[maxX+1, maxY+1];
 
@@ -39,7 +36,7 @@ public class LevelLoader : MonoBehaviour {
 
 		int count = 0;
 		char current = levelData[count];
-		while (current != '!') {
+		while (current != 'X') {
 			currentLevel [x, y] = current;
 			if (current == '\n') {
 				y++;
@@ -63,11 +60,19 @@ public class LevelLoader : MonoBehaviour {
 				case '@':
 					Instantiate (playerGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
 					break;
+				case '$':
+					Instantiate (flagGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
+					break;
+				case '!':
+					Instantiate (spikeGO, new Vector3 (horiz, -vert, 0), Quaternion.identity);
+					break;
 				default:
 					break;
 				}
 			}
 		}
+
+		level++;
 	}
 	
 	// Update is called once per frame
@@ -77,5 +82,25 @@ public class LevelLoader : MonoBehaviour {
 
 	void SetLevelsDimensions(int x, int y) {
 
+	}
+
+	void GetInitialCoordinates(string levelData) {
+		int firstPassX = 0;
+
+		int firstPassCount = 0;
+		char firstPassCurrent = levelData[firstPassCount];
+		while (firstPassCurrent != 'X') {
+			if (firstPassCurrent == '\n') {
+				maxY++;
+				maxX = firstPassX;
+				firstPassX = 0;
+			} else if (firstPassCurrent != '\n') {
+				firstPassX++;
+			}
+			firstPassCount++;
+			firstPassCurrent = levelData[firstPassCount];
+		}
+
+		leftOffAtIndex = firstPassCount;
 	}
 }
